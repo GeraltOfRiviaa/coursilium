@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-10">
+            {% if courses %}
+                <div id="courseCarousel" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-indicators">
+                        {% for course in courses %}
+                            <button
+                                type="button"
+                                data-bs-target="#courseCarousel"
+                                data-bs-slide-to="{{ forloop.counter0 }}"
+                                class="{% if forloop.first %}active{% endif %}"
+                                aria-current="{% if forloop.first %}true{% else %}false{% endif %}"
+                                aria-label="Slide {{ forloop.counter }}"
+                            ></button>
+                        {% endfor %}
+                    </div>
+
+                    <div class="carousel-inner">
+                        {% for course in courses %}
+                            <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                                <div class="ratio ratio-21x9 position-relative rounded-4 overflow-hidden bg-dark">
+                                    {% if course.img %}
+                                        <img
+                                            src="{{ course.img.url }}"
+                                            class="w-100 h-100 object-fit-cover"
+                                            alt="{{ course.title }}"
+                                        />
+                                    {% else %}
+                                        <div class="w-100 h-100 bg-secondary bg-gradient"></div>
+                                    {% endif %}
+                                    <div class="position-absolute top-0 start-0 w-100 h-100 bg-dark opacity-50"></div>
+                                    <div class="position-absolute bottom-0 start-0 p-4 p-md-5 text-white">
+                                        <h2 class="h3 h1-md mb-0">{{ course.title }}</h2>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                    <button
+                        class="carousel-control-prev"
+                        type="button"
+                        data-bs-target="#courseCarousel"
+                        data-bs-slide="prev"
+                    >
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button
+                        class="carousel-control-next"
+                        type="button"
+                        data-bs-target="#courseCarousel"
+                        data-bs-slide="next"
+                    >
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
+            {% else %}
+                <div class="text-center text-muted">No courses available yet.</div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

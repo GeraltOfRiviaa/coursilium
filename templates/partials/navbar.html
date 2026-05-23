@@ -2,7 +2,7 @@
     class="navbar navbar-expand-sm navbar-dark bg-dark"
 >
     <div class="container">
-        <a class="navbar-brand" href="#">Navbar</a>
+        <a class="navbar-brand" href="{% url 'home' %}">Coursilium</a>
         <button
             class="navbar-toggler d-lg-none"
             type="button"
@@ -17,14 +17,44 @@
         <div class="collapse navbar-collapse" id="collapsibleNavId">
             <ul class="navbar-nav me-auto mt-2 mt-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link active" href="#" aria-current="page">Home</a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Courses</a>
+                    <a class="nav-link" href="{% url 'course_list' %}">Courses</a>
                 </li>
             </ul>
-            
+            <ul class="navbar-nav ms-auto">
+                {% if user.is_authenticated %}
+                    <li class="nav-item dropdown">
+                        <a
+                            class="nav-link dropdown-toggle d-inline-flex align-items-center justify-content-center text-uppercase user-initials"
+                            href="#"
+                            role="button"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false"
+                        >
+                            {{ user.username|slice:":3"|upper }}
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+                            <li><a class="dropdown-item" href="{% url 'login' %}">Switch accounts</a></li>
+                        </ul>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'login' %}">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'register' %}">Register</a>
+                    </li>
+                {% endif %}
+            </ul>
         </div>
     </div>
 </nav>
+
+<style>
+    .user-initials {
+        width: 36px;
+        height: 36px;
+        font-size: 0.85rem;
+        line-height: 1;
+    }
+</style>

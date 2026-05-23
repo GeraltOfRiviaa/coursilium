@@ -6,7 +6,7 @@
         <div class="col-12 col-lg-10">
             {% if courses %}
                 <div id="courseCarousel" class="carousel slide" data-bs-ride="carousel">
-                    <div class="carousel-indicators">
+                    <div class="carousel-indicators text-light">
                         {% for course in courses %}
                             <button
                                 type="button"
@@ -21,22 +21,24 @@
 
                     <div class="carousel-inner">
                         {% for course in courses %}
-                            <div class="carousel-item {% if forloop.first %}active{% endif %}">
-                                <div class="ratio ratio-21x9 position-relative rounded-4 overflow-hidden bg-dark">
-                                    {% if course.img %}
-                                        <img
-                                            src="{{ course.img.url }}"
-                                            class="w-100 h-100 object-fit-cover"
-                                            alt="{{ course.title }}"
-                                        />
-                                    {% else %}
-                                        <div class="w-100 h-100 bg-secondary bg-gradient"></div>
-                                    {% endif %}
-                                    <div class="position-absolute top-0 start-0 w-100 h-100 bg-dark opacity-50"></div>
-                                    <div class="position-absolute bottom-0 start-0 p-4 p-md-5 text-white">
-                                        <h2 class="h3 h1-md mb-0">{{ course.title }}</h2>
+                            <div class="carousel-item {% if forloop.first %}active{% endif %}" >
+                                <a href="{% url 'course_detail' course.course_id %}" class="carousel-link">
+                                    <div class="carousel-card ratio ratio-21x9 position-relative rounded-4 overflow-hidden bg-dark">
+                                        {% if course.img %}
+                                            <img
+                                                src="{{ course.img.url }}"
+                                                class="w-100 h-100 object-fit-cover"
+                                                alt="{{ course.title }}"
+                                            />
+                                        {% else %}
+                                            <div class="w-100 h-100 bg-secondary bg-gradient"></div>
+                                        {% endif %}
+                                        <div class="position-absolute top-0 start-0 w-100 h-100 bg-dark opacity-50"></div>
+                                        <div class="position-absolute bottom-0 start-0 p-4 p-md-5 text-white">
+                                            <h2 class="h3 h1-md mb-0" >{{ course.title }} </h2>
+                                        </div>
                                     </div>
-                                </div>
+                                </a>
                             </div>
                         {% endfor %}
                     </div>
@@ -66,4 +68,26 @@
         </div>
     </div>
 </div>
+
+<style>
+    .carousel-link {
+        display: block;
+        text-decoration: none;
+        color: inherit;
+        cursor: pointer;
+    }
+
+    .carousel-card {
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+
+    .carousel-link:hover .carousel-card {
+
+        box-shadow: 0 18px 34px rgba(56, 189, 248, 0.25);
+        border-color: rgba(56, 189, 248, 0.45);
+    }
+    
+</style>
 {% endblock %}

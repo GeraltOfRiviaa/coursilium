@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ course.title }}{% endblock %}
+
+{% block content %}
+<div class="container course-detail">
+	<div class="row justify-content-center">
+		<div class="col-lg-9">
+			<div class="detail-media{% if not course.img %} detail-media--empty{% endif %}">
+				{% if course.img %}
+					<img src="{{ course.img.url }}" alt="{{ course.title }}" />
+				{% else %}
+					<div class="detail-media__placeholder">No image available</div>
+				{% endif %}
+			</div>
+
+			<div class="detail-header">
+				<h1>{{ course.title }}</h1>
+				<div class="detail-tags">
+					{% if course.category %}
+						<span class="badge text-bg-info">{{ course.category.category_name }}</span>
+					{% else %}
+						<span class="badge text-bg-secondary">Uncategorized</span>
+					{% endif %}
+					<span class="badge text-bg-warning text-dark">{{ course.get_difficulty_display }}</span>
+				</div>
+			</div>
+
+			<div class="detail-body">
+				<p>{{ course.description }}</p>
+			</div>
+		</div>
+	</div>
+</div>
+
+<style>
+	.course-detail {
+		padding-top: 2rem;
+		padding-bottom: 3rem;
+	}
+
+	.detail-header {
+		margin-bottom: 1.5rem;
+	}
+
+	.detail-media {
+		border-radius: 18px;
+		overflow: hidden;
+		margin-bottom: 1.75rem;
+		border: 1px solid rgba(255, 255, 255, 0.12);
+		box-shadow: 0 16px 32px rgba(0, 0, 0, 0.25);
+	}
+
+	.detail-media img {
+		width: 100%;
+		height: 360px;
+		object-fit: cover;
+		display: block;
+	}
+
+	.detail-media--empty {
+		background: linear-gradient(135deg, #1b2735, #2b4162);
+		height: 260px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		color: #cbd5f5;
+	}
+
+	.detail-media__placeholder {
+		font-size: 0.95rem;
+		letter-spacing: 0.02em;
+	}
+
+	.detail-header h1 {
+		margin-bottom: 0.75rem;
+	}
+
+	.detail-tags {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+	}
+
+	.detail-body {
+		padding: 1.5rem;
+		border-radius: 14px;
+		background: #0f172a;
+		border: 1px solid rgba(255, 255, 255, 0.12);
+		color: #e2e8f0;
+		box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+	}
+
+	.detail-body p {
+		margin: 0;
+		line-height: 1.7;
+	}
+</style>
+{% endblock %}

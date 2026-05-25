@@ -3,7 +3,7 @@
 {% block content %}
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-12 col-lg-10">
+        <div class="col-12 col-lg-9">
             {% if courses %}
                 <div id="courseCarousel" class="carousel slide" data-bs-ride="carousel">
                     <div class="carousel-indicators text-light">
@@ -23,7 +23,7 @@
                         {% for course in courses %}
                             <div class="carousel-item {% if forloop.first %}active{% endif %}" >
                                 <a href="{% url 'course_detail' course.course_id %}" class="carousel-link">
-                                    <div class="carousel-card ratio ratio-21x9 position-relative rounded-4 overflow-hidden bg-dark">
+                                    <div class="carousel-card ratio ratio-21x9 position-relative rounded-4 overflow-hidden">
                                         {% if course.img %}
                                             <img
                                                 src="{{ course.img.url }}"
@@ -33,9 +33,25 @@
                                         {% else %}
                                             <div class="w-100 h-100 bg-secondary bg-gradient"></div>
                                         {% endif %}
-                                        <div class="position-absolute top-0 start-0 w-100 h-100 bg-dark opacity-50"></div>
+                                        <div class="carousel-overlay position-absolute top-0 start-0 w-100 h-100"></div>
                                         <div class="position-absolute bottom-0 start-0 p-4 p-md-5 text-white">
-                                            <h2 class="h3 h1-md mb-0" >{{ course.title }} </h2>
+                                            <div class="row g-2 align-items-end">
+                                                <div class="col-md-8">
+                                                    <h2 class="h3 h1-md mb-0">{{ course.title }}</h2>
+                                                </div>
+                                                <div class="col-md-4 text-md-end">
+                                                    <div class="text-uppercase small opacity-75">Categories</div>
+                                                    {% if course.categories.all %}
+                                                        <div class="fw-semibold">
+                                                            {% for category in course.categories.all %}
+                                                                {{ category.category_name }}{% if not forloop.last %}, {% endif %}
+                                                            {% endfor %}
+                                                        </div>
+                                                    {% else %}
+                                                        <div class="fw-semibold">Uncategorized</div>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </a>
@@ -66,7 +82,66 @@
                 <div class="text-center text-muted">No courses available yet.</div>
             {% endif %}
         </div>
+        <div class="col-12 col-lg-3 mt-4 mt-lg-0">
+            <aside class="category-panel site-surface">
+                <h3 class="h5 mb-3">Categories</h3>
+                <div class="category-scroll">
+                    <ul class="list-unstyled category-list">
+                        <li>
+                            <button class="category-pill is-active" type="button" data-category-id="all">All categories</button>
+                        </li>
+                        {% for category in categories %}
+                            <li>
+                                <button class="category-pill" type="button" data-category-id="{{ category.category_id }}">{{ category.category_name }}</button>
+                            </li>
+                        {% empty %}
+                            <li class="text-muted">No categories available.</li>
+                        {% endfor %}
+                        {% if has_uncategorized %}
+                            <li>
+                                <button class="category-pill" type="button" data-category-id="uncategorized">Uncategorized</button>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </aside>
+        </div>
     </div>
+
+    {% if courses %}
+        <div class="category-sections">
+            {% for group in grouped_courses %}
+                <section
+                    class="category-section site-surface"
+                    data-category-id="{% if group.category %}{{ group.category.category_id }}{% else %}uncategorized{% endif %}"
+                >
+                    <div class="d-flex flex-wrap align-items-center justify-content-between gap-2">
+                        <h3 class="h4 mb-0">
+                            {% if group.category %}
+                                {{ group.category.category_name }}
+                            {% else %}
+                                Uncategorized
+                            {% endif %}
+                        </h3>
+                        <span class="text-muted small">{{ group.courses|length }} courses</span>
+                    </div>
+                    <div class="row g-3 mt-1">
+                        {% for course in group.courses %}
+                            <div class="col-12 col-md-6">
+                                <a class="course-row" href="{% url 'course_detail' course.course_id %}">
+                                    <div>
+                                        <div class="course-row__title">{{ course.title }}</div>
+                                        <div class="course-row__desc">{{ course.description|truncatechars:120 }}</div>
+                                    </div>
+                                    <span class="badge text-bg-warning text-dark">{{ course.get_difficulty_display }}</span>
+                                </a>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </section>
+            {% endfor %}
+        </div>
+    {% endif %}
 </div>
 
 <style>
@@ -78,16 +153,145 @@
     }
 
     .carousel-card {
-        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25);
-        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: #fdf5ec;
+        border: 1px solid rgba(44, 36, 26, 0.12);
+        box-shadow: 0 16px 32px rgba(44, 36, 26, 0.18);
         transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+
+    .carousel-overlay {
+        background: linear-gradient(180deg, rgba(44, 36, 26, 0.12) 0%, rgba(44, 36, 26, 0.65) 100%);
     }
 
     .carousel-link:hover .carousel-card {
 
-        box-shadow: 0 18px 34px rgba(56, 189, 248, 0.25);
-        border-color: rgba(56, 189, 248, 0.45);
+        box-shadow: 0 22px 40px rgba(196, 106, 70, 0.25);
+        border-color: rgba(196, 106, 70, 0.45);
+    }
+
+    .carousel-control-prev-icon,
+    .carousel-control-next-icon {
+        filter: brightness(0.4);
+    }
+
+    .carousel-indicators [data-bs-target] {
+        background-color: rgba(44, 36, 26, 0.4);
+    }
+
+    .carousel-indicators .active {
+        background-color: rgba(44, 36, 26, 0.85);
+    }
+
+    .category-panel {
+        border-radius: 18px;
+        padding: 1.35rem;
+    }
+
+    .category-scroll {
+        max-height: 320px;
+        overflow-y: auto;
+        padding-right: 0.35rem;
+    }
+
+    .category-list {
+        display: grid;
+        gap: 0.5rem;
+    }
+
+    .category-pill {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.35rem 0.75rem;
+        border-radius: 999px;
+        background: rgba(196, 106, 70, 0.16);
+        color: #3d2f24;
+        border: 1px solid rgba(196, 106, 70, 0.35);
+        font-size: 0.85rem;
+        width: 100%;
+        text-align: left;
+        transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+    }
+
+    .category-pill:hover,
+    .category-pill:focus {
+        background: rgba(196, 106, 70, 0.26);
+        border-color: rgba(196, 106, 70, 0.6);
+    }
+
+    .category-pill.is-active {
+        background: rgba(95, 107, 58, 0.2);
+        border-color: rgba(95, 107, 58, 0.55);
+        color: #2c241a;
+        font-weight: 600;
+    }
+
+    .category-sections {
+        margin-top: 2.5rem;
+        display: grid;
+        gap: 2rem;
+    }
+
+    .category-section {
+        padding: 1.35rem;
+        border-radius: 20px;
+    }
+
+    .course-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        padding: 0.75rem 1rem;
+        border-radius: 12px;
+        background: rgba(255, 248, 240, 0.9);
+        border: 1px solid rgba(44, 36, 26, 0.12);
+        color: inherit;
+        text-decoration: none;
+        height: 100%;
+        transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+
+    .course-row:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 14px 22px rgba(196, 106, 70, 0.18);
+        border-color: rgba(196, 106, 70, 0.35);
+    }
+
+    .course-row__title {
+        font-weight: 600;
+        margin-bottom: 0.25rem;
+    }
+
+    .course-row__desc {
+        font-size: 0.85rem;
+        opacity: 0.8;
     }
     
 </style>
+
+<script>
+    (() => {
+        const buttons = document.querySelectorAll(".category-pill[data-category-id]");
+        const sections = document.querySelectorAll(".category-section[data-category-id]");
+
+        if (!buttons.length || !sections.length) {
+            return;
+        }
+
+        const setActive = (targetId) => {
+            buttons.forEach((button) => {
+                button.classList.toggle("is-active", button.dataset.categoryId === targetId);
+            });
+
+            sections.forEach((section) => {
+                const matches = targetId === "all" || section.dataset.categoryId === targetId;
+                section.style.display = matches ? "block" : "none";
+            });
+        };
+
+        buttons.forEach((button) => {
+            button.addEventListener("click", () => setActive(button.dataset.categoryId));
+        });
+    })();
+</script>
 {% endblock %}

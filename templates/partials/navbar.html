@@ -1,6 +1,4 @@
-<nav
-    class="navbar navbar-expand-sm navbar-dark bg-dark"
->
+<nav class="navbar navbar-expand-sm site-nav">
     <div class="container">
         <a class="navbar-brand" href="{% url 'home' %}">Coursilium</a>
         <button
@@ -23,13 +21,7 @@
             <ul class="navbar-nav ms-auto">
                 {% if user.is_authenticated %}
                     <li class="nav-item dropdown">
-                        <a
-                            class="nav-link dropdown-toggle d-inline-flex align-items-center justify-content-center text-uppercase user-initials"
-                            href="#"
-                            role="button"
-                            data-bs-toggle="dropdown"
-                            aria-expanded="false"
-                        >
+                        <a class="nav-link dropdown-toggle d-inline-flex align-items-center justify-content-center text-uppercase user-initials" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             {{ user.username|slice:":3"|upper }}
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
@@ -56,5 +48,6 @@
         height: 36px;
         font-size: 0.85rem;
         line-height: 1;
+        border: 1px solid rgba(44, 36, 26, 0.2);
     }
 </style>

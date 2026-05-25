@@ -1,7 +1,7 @@
 <!doctype html>
-<html lang="en" data-bs-theme="dark">
+<html lang="en" data-bs-theme="light">
     <head>
-        <title></title>
+        <title>{% block title %}Coursilium{% endblock %}</title>
         <!-- Required meta tags -->
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -13,6 +13,102 @@
             integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
             crossorigin="anonymous"
         />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Source+Sans+3:wght@300;400;500;600&display=swap"
+            rel="stylesheet"
+        />
+        <style>
+            :root {
+                --sand: #f6efe6;
+                --clay: #d8b08c;
+                --ember: #c46a46;
+                --olive: #5f6b3a;
+                --ink: #2c241a;
+                --muted: #6f5b4a;
+                --card: #fff8f0;
+                --line: rgba(44, 36, 26, 0.12);
+                --shadow: 0 16px 30px rgba(44, 36, 26, 0.12);
+            }
+
+            body {
+                font-family: "Source Sans 3", "Segoe UI", sans-serif;
+                color: var(--ink);
+                background:
+                    radial-gradient(circle at top left, rgba(216, 176, 140, 0.35), transparent 55%),
+                    radial-gradient(circle at bottom right, rgba(196, 106, 70, 0.18), transparent 60%),
+                    var(--sand);
+            }
+
+            h1, h2, h3, h4, h5, h6 {
+                font-family: "Playfair Display", "Times New Roman", serif;
+                letter-spacing: -0.02em;
+            }
+
+            a {
+                color: #8f5a3c;
+                text-decoration: none;
+            }
+
+            a:hover {
+                color: #6f4228;
+            }
+
+            .btn-primary {
+                background-color: var(--ember);
+                border-color: var(--ember);
+            }
+
+            .btn-primary:hover,
+            .btn-primary:focus {
+                background-color: #a95637;
+                border-color: #a95637;
+            }
+
+            .badge {
+                font-weight: 500;
+            }
+
+            .site-surface {
+                background: var(--card);
+                border: 1px solid var(--line);
+                box-shadow: var(--shadow);
+            }
+
+            .site-nav {
+                background: rgba(255, 248, 240, 0.92);
+                border-bottom: 1px solid var(--line);
+                backdrop-filter: blur(12px);
+            }
+
+            .site-nav .navbar-brand {
+                font-weight: 600;
+                letter-spacing: 0.02em;
+            }
+
+            .site-nav .nav-link {
+                color: var(--ink);
+                font-weight: 500;
+                border-radius: 999px;
+                padding: 0.35rem 0.9rem;
+                transition: background 0.2s ease, color 0.2s ease;
+            }
+
+            .site-nav .nav-link:hover,
+            .site-nav .nav-link:focus {
+                background: rgba(196, 106, 70, 0.12);
+                color: var(--ink);
+            }
+
+            .site-footer {
+                padding: 1.5rem 0 2.5rem;
+                color: var(--muted);
+                font-size: 0.9rem;
+            }
+
+            main {
+                min-height: calc(100vh - 200px);
+            }
+        </style>
     </head>
 
     <body>

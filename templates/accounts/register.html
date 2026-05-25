@@ -7,7 +7,7 @@
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-6">
-            <div class="card shadow-lg">
+            <div class="card site-surface border-0">
                 <div class="card-body p-5">
                     <h2 class="card-title text-center mb-4">Create an Account</h2>
                     
@@ -37,6 +37,15 @@
                             {% if form.email.errors %}
                                 <div class="invalid-feedback d-block">
                                     {{ form.email.errors.0 }}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form.role }}
+                            {% if form.role.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.role.errors.0 }}
                                 </div>
                             {% endif %}
                         </div>
@@ -72,18 +81,22 @@
 </div>
 
 <style>
+    .card {
+        border-radius: 20px;
+    }
+
     .form-control, .form-control:focus {
-        border-radius: 0.375rem;
+        border-radius: 0.75rem;
+        border-color: rgba(44, 36, 26, 0.2);
     }
     
     .form-control:focus {
-        border-color: #80bdff;
-        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        box-shadow: 0 0 0 0.2rem rgba(196, 106, 70, 0.2);
     }
     
     .invalid-feedback {
         font-size: 0.875rem;
-        color: #dc3545;
+        color: #b03f2c;
     }
 </style>
 {% endblock %}

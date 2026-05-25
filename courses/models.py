@@ -1,5 +1,6 @@
 from datetime import date
 
+from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.validators import EmailValidator, MinValueValidator, RegexValidator
 from django.db import models
@@ -137,6 +138,38 @@ class User(models.Model):
  
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
+
+
+class UserProfile(models.Model):
+    ROLE_CHOICES = [
+        ("student", "Student"),
+        ("teacher", "Teacher"),
+    ]
+
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="profile",
+    )
+    role = models.CharField(
+        max_length=10,
+        choices=ROLE_CHOICES,
+        default="student",
+        verbose_name="Role",
+        help_text="Select user role",
+    )
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Vytvořeno")
+    updated_at = models.DateTimeField(null=True, blank=True, verbose_name="Upraveno")
+
+    class Meta:
+        db_table = "user_profile"
+        indexes = [
+            models.Index(fields=["role"]),
+            models.Index(fields=["created_at"]),
+        ]
+
+    def __str__(self):
+        return f"{self.user} ({self.role})"
  
  
 class Category(models.Model):
@@ -197,19 +230,27 @@ class Course(models.Model):
         verbose_name="Náročnost",
         help_text="Vyberte úroveň náročnosti kurzu",
     )
-    category = models.ForeignKey(
+    categories = models.ManyToManyField(
         Category,
-        on_delete=models.SET_NULL,
-        null=True,
         blank=True,
+        related_name="courses",
         verbose_name="Kategorie",
-        help_text="Vyberte kategorii kurzu",
+        help_text="Vyberte kategorie kurzu",
     )
     img = models.ImageField(upload_to="media/course_imgs",
         null=True,
         blank=True,
         verbose_name="Miniatura kurzu",
         help_text="Nahrajte miniaturu kurzu",)
+    created_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="courses_created",
+        verbose_name="Vytvořil",
+        help_text="Uživatel, který kurz vytvořil",
+    )
     is_active = models.BooleanField(verbose_name="Aktivní", help_text="Určuje, jestli je kurz viditelný")
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Vytvořeno")
     updated_at = models.DateTimeField(null=True, blank=True, verbose_name="Upraveno")
@@ -221,7 +262,6 @@ class Course(models.Model):
             models.Index(fields=["is_active"]),
             models.Index(fields=["course_id"]),
             models.Index(fields=["title"]),
-            models.Index(fields=["category"]),
             models.Index(fields=["difficulty"]),
         ]
  

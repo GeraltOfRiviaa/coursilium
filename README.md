@@ -5,6 +5,12 @@
 
 ---
 
+## How to run the site
+
+- Create virtual enviroment with `py -m venv .venv`
+- Install packages with `pip install -r ./requirements.txt`
+- Run `py manage.py runserver`
+
 ## 🎯 The Problem We're Solving
 
 In today's digital age, online education has become essential, but many platforms struggle with organizing educational content in a structured, scalable way. The challenge is to create a database system that can:
